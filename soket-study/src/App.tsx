@@ -1,9 +1,13 @@
 import React from "react";
-import logo from "./logo.svg";
+import SoketPage from "./components/SoketPage";
 import "./App.css";
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <SoketPage />
+    </div>
+  );
 }
 
 export default App;

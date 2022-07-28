@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import styled from "styled-components";
 
 const SoketPage = () => {
+  const socket = io("http://localhost:5000/", { transports: ["websocket"] });
   const [list, setList] = useState<string[]>([]);
 
   const listMap = list.map((item: string, idx: number) => {
     return <li key={idx}>{item}</li>;
   });
+
+  useEffect(() => {
+    socket.emit("message", {
+      body: "",
+    });
+  }, []);
 
   return (
     <_SoketPageContainer>

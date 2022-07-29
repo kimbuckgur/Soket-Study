@@ -3,24 +3,38 @@ import { io } from "socket.io-client";
 import styled from "styled-components";
 
 const SoketPage = () => {
-  const socket = io("http://localhost:5000/", { transports: ["websocket"] });
+  // const socket = io("http://localhost:5000/", { transports: ["websocket"] });
+
+  const [text, setText] = useState<string>("");
   const [list, setList] = useState<string[]>([]);
 
-  const listMap = list.map((item: string, idx: number) => {
-    return <li key={idx}>{item}</li>;
-  });
+  const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
+
+  const listInText = () => {
+    let copyList = [...list];
+    copyList.push(text);
+    setList(copyList);
+    setText("");
+  };
 
   useEffect(() => {
-    socket.emit("message", {
-      body: "",
-    });
+    // socket.connect();
   }, []);
 
   return (
     <_SoketPageContainer>
       <h1>소켓 통신 테스트</h1>
-      <_SoketPageInput />
-      <ul>{listMap}</ul>
+      <_DisplayFlex>
+        <_SoketPageInput onChange={onChangeText} value={text} />
+        <_SoketPagePlusButton onClick={listInText}>추가</_SoketPagePlusButton>
+      </_DisplayFlex>
+      <ul>
+        {list.map((item: string, idx: number) => {
+          return <li key={idx}>{item}</li>;
+        })}
+      </ul>
     </_SoketPageContainer>
   );
 };
@@ -31,6 +45,17 @@ const _SoketPageContainer = styled.div`
   align-items: flex-start;
 
   margin-left: 50px; ;
+`;
+
+const _DisplayFlex = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const _SoketPagePlusButton = styled.button`
+  width: 100px;
+  height: 36px;
 `;
 
 const _SoketPageInput = styled.input`

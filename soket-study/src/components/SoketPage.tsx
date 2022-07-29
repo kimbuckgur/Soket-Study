@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import styled from "styled-components";
 
 const SoketPage = () => {
-  // const socket = io("http://localhost:5000/", { transports: ["websocket"] });
+  const socket = io("http://localhost:5000/", { transports: ["websocket"] });
 
   const [text, setText] = useState<string>("");
   const [list, setList] = useState<string[]>([]);
@@ -12,15 +12,22 @@ const SoketPage = () => {
     setText(e.target.value);
   };
 
+  const postText = () => {
+    socket.emit("list", {
+      data: text,
+    });
+  };
+
   const listInText = () => {
     let copyList = [...list];
     copyList.push(text);
     setList(copyList);
     setText("");
+    postText();
   };
 
   useEffect(() => {
-    // socket.connect();
+    socket.connect();
   }, []);
 
   return (

@@ -19,7 +19,7 @@ const SoketPage = () => {
 
   const postText = () => {
     let emitItem: itemType = {
-      id: `${item.length - 1}`,
+      id: `${item.length}`,
       text: text,
     };
     socket.emit("plus", {
@@ -32,6 +32,13 @@ const SoketPage = () => {
     socket.emit("delete", {});
   };
 
+  socket.on("data", (data) => {
+    let copyItem = [...item];
+    copyItem.push(data.data);
+    setItem(copyItem);
+    console.log(data);
+  });
+
   useEffect(() => {
     socket.connect();
   }, []);
@@ -43,7 +50,7 @@ const SoketPage = () => {
         <_SoketPageInput onChange={onChangeText} value={text} />
         <_SoketPagePlusButton onClick={postText}>추가</_SoketPagePlusButton>
       </_DisplayFlex>
-      <ul>
+      <div>
         {item.map((item: itemType, idx: number) => {
           return (
             <_ListLayout key={idx}>
@@ -52,7 +59,7 @@ const SoketPage = () => {
             </_ListLayout>
           );
         })}
-      </ul>
+      </div>
     </_SoketPageContainer>
   );
 };
@@ -62,7 +69,7 @@ const _DeleteButton = styled.button`
   height: 100%;
 `;
 
-const _ListLayout = styled.li`
+const _ListLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;

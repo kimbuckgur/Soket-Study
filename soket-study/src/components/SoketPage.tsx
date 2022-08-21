@@ -28,8 +28,10 @@ const SoketPage = () => {
     setText("");
   };
 
-  const deleteText = () => {
-    socket.emit("delete", {});
+  const deleteText = (e: React.MouseEvent<HTMLButtonElement>) => {
+    socket.emit("delete", {
+      id: e.currentTarget.name,
+    });
   };
 
   socket.on("data", (data) => {
@@ -55,7 +57,9 @@ const SoketPage = () => {
           return (
             <_ListLayout key={idx}>
               <span>{item.text}</span>
-              <_DeleteButton name={item.id}>삭제</_DeleteButton>
+              <_DeleteButton name={item.id} onClick={deleteText}>
+                삭제
+              </_DeleteButton>
             </_ListLayout>
           );
         })}
